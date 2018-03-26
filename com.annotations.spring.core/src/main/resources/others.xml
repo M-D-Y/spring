@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+ 		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+ 		http://www.springframework.org/schema/util
+ 		http://www.springframework.org/schema/util/spring-util-3.2.xsd"	
+	default-lazy-init="true">
+
+
+	
+<!-- 	<bean id="propertiesPlaceHolder" -->
+<!-- 	class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> -->
+<!-- 	<property name="location"> -->
+<!-- 	<value>classpath:client.properties</value> -->
+<!-- 	</property> -->
+<!-- 	<property name="ignoreResourceNotFound" value="true" /> -->
+<!-- 	<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"  -->
+<!-- 		/> -->
+<!-- 	</bean> -->
+	
+
+	<!-- new style -->
+	<util:properties id="clientProperties" location="classpath:client.properties"/> 
+
+
+
+	<bean id="event" class="com.annotations.spring.core.beans.Event" scope="prototype">
+		<constructor-arg>
+			<bean class="java.util.Date"></bean>
+		</constructor-arg>
+		<constructor-arg>
+			<bean id="dateFormat" class="java.text.DateFormat"
+				factory-method="getDateTimeInstance">
+			</bean>
+		</constructor-arg>
+		<property name="msg" value="Event message..." />
+	</bean>
+
+
+	<bean id="client" class="com.annotations.spring.core.beans.Client">
+		<constructor-arg value="#{clientProperties['id']}" />
+		<constructor-arg value="#{clientProperties['name']}" />
+		<property name="greeting" value="#{clientProperties['greeting']}"></property>
+	</bean>
+
+</beans>
